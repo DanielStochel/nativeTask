@@ -1,25 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, Image } from "react-native";
+import fetchComics from "./app/utilFunctions/fetchComics";
 
-export default function App() {
-  const [name, setName] = useState('changing name')
-  useEffect(async() => {
-    const fetchComics = await axios.get("https://xkcd.com/info.0.json");
-    console.log(fetchComics)
-  }, [])
-  return (
-    <View style={styles.container}>
-      <Text>{name}dsadsadasda</Text>
-    </View>
-  );
-}
+const App = props => {
+  const [comics, setComics] = useState([]);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  useEffect(async () => {
+    const lastEightComics = [];
+    await fetchComics(lastEightComics, 2237);
+    await fetchComics(lastEightComics, 2236);
+    await fetchComics(lastEightComics, 2235);
+    await fetchComics(lastEightComics, 2234);
+    await fetchComics(lastEightComics, 2233);
+    await fetchComics(lastEightComics, 2232);
+    await fetchComics(lastEightComics, 2231);
+    await fetchComics(lastEightComics, 2230);
+    setComics(lastEightComics);
+  }, []);
+  
+  const renderComics = () => {
+    return comics.map(detailOfComics => {
+      return (
+        <View>
+          <Text>{detailOfComics.alt}</Text>
+          <Image
+            style={{ width: 100, height: 100 }}
+            source={{ uri: detailOfComics.img }}
+          />
+        </View>
+      );
+    });
+  };
+
+  return <View>{renderComics()}</View>;
+};
+
+export default App;
