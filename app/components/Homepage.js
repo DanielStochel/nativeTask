@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from "react";
 import fetchComics from "../utilFunctions/fetchComics";
 import { Text, View, Image, Button, FlatList } from "react-native";
+import fetchCurrComic from "../utilFunctions/fetchCurrComic";
 
 const Homepage = props => {
   const [comics, setComics] = useState([]);
 
   useEffect(async () => {
-    const lastEightComics = [];
     // Api allows us to fetch only a single comic per request. It's not possible to fetch a bunch of comics at once
-
-    await fetchComics(lastEightComics, 2237);
-    await fetchComics(lastEightComics, 2236);
-    await fetchComics(lastEightComics, 2235);
-    await fetchComics(lastEightComics, 2234);
-    await fetchComics(lastEightComics, 2233);
-    await fetchComics(lastEightComics, 2232);
-    await fetchComics(lastEightComics, 2231);
-    await fetchComics(lastEightComics, 2230);
+    const getIndexOfActualComic = await fetchCurrComic();
+    const lastEightComics = await fetchComics(getIndexOfActualComic);
 
     setComics(lastEightComics);
   }, []);
